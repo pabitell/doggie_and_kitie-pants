@@ -1,0 +1,69 @@
+[package]
+name = "doggie_and_kitie_pants"
+version = "0.0.0"
+authors = ["Stepan Henek <stepan@henek.name>"]
+edition = "2021"
+description = "Interactive storytelling - doggie and kitie pants story"
+license = "CC0"
+readme = "README.md"
+keywords = ["games", "stories", "books"]
+repository = "https://github.com/pabitell/doggie_and_kitie-pants"
+categories = ["games", "web-programming"]
+
+[features]
+default = []
+with_webapp = [
+	'console_error_panic_hook',
+	'pabitell-lib/with_webapp',
+	'uuid/v4',
+	'uuid/js',
+	'wasm-logger',
+	'wee_alloc',
+	'yew',
+]	
+with_cli = [
+	'pabitell-lib/with_cli',
+]
+
+[dependencies]
+anyhow = { version = "1", features = ["std", "backtrace"] }
+fluent = { version = "0.16" }
+console_error_panic_hook = { version = "0.1", optional = true }
+include_dir = { version = "0.7", features = ["glob"] }
+intl-memoizer = { version = "0.5" }
+lazy_static = { version = "1" }
+pabitell-lib = { path = "../pabitell/pabitell-lib" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.1", features = [ 'v4', 'js' ] } # remove features once https://github.com/thedodd/trunk/pull/183 is merged 
+wee_alloc = { version = "~0.4.5", optional = true }
+wasm-logger = { version = "0.2", optional = true }
+yew = { version = "0.19", optional = true }
+
+
+[dev-dependencies]
+
+
+[lib]
+name = "common"
+path = "src/lib.rs"
+
+[[bin]]
+name = "webapp"
+required-features = ["with_webapp"]
+
+[[bin]]
+name = "cli"
+required-features = ["with_cli"]
+
+[profile.release]
+# less code to include into binary
+panic = 'abort' 
+# optimization over all codebase ( better optimization, slower build )
+codegen-units = 1
+# optimization for size ( more aggressive )
+opt-level = 'z' 
+# optimization for size 
+#opt-level = 's' 
+# link time optimization using using whole-program analysis
+lto = true
