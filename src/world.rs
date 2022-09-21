@@ -203,6 +203,9 @@ impl World for PantsWorld {
     fn get_message(&self, msgid: &str, args: Option<fluent::FluentArgs>) -> String {
         get_message(msgid, &self.lang, args)
     }
+    fn version(&self) -> usize {
+        1
+    }
 }
 
 impl Dumpable for PantsWorld {
