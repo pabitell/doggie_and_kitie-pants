@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use pabitell_lib::{AsAny, Character, Description, Dumpable, Named, Tagged};
+use pabitell_lib::{AsAny, Character, Clean, Description, Dumpable, Named, Tagged};
 use serde_json::{json, Value};
 use std::any::Any;
 
@@ -49,6 +49,12 @@ impl Dumpable for Kitie {
         }
 
         Ok(())
+    }
+}
+
+impl Clean for Kitie {
+    fn clean(&mut self) {
+        self.scene = None;
     }
 }
 
@@ -110,6 +116,12 @@ impl Dumpable for Doggie {
         }
 
         Ok(())
+    }
+}
+
+impl Clean for Doggie {
+    fn clean(&mut self) {
+        self.scene = None;
     }
 }
 

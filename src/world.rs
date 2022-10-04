@@ -1,7 +1,7 @@
 use anyhow::{anyhow, Result};
 use pabitell_lib::{
-    translations::get_available_locales, Character, Description, Dumpable, Item, ItemState, Named,
-    Scene, Tagged, World, WorldBuilder,
+    translations::get_available_locales, Character, Clean, Description, Dumpable, Item, ItemState,
+    Named, Scene, Tagged, World, WorldBuilder,
 };
 use std::collections::HashMap;
 use uuid::Uuid;
@@ -161,8 +161,10 @@ impl World for PantsWorld {
             .collect()
     }
 
-    fn setup(&mut self) {
-        self.randomize_ids();
+    fn setup(&mut self, new_id: bool) {
+        if new_id {
+            self.randomize_id();
+        }
 
         self.characters_mut()
             .values_mut()
@@ -190,10 +192,6 @@ impl World for PantsWorld {
         self.event_count += 1;
     }
 
-    fn extra_clean(&mut self) {
-        self.event_count = 0;
-    }
-
     fn id(&self) -> &Uuid {
         &self.id
     }
@@ -205,6 +203,12 @@ impl World for PantsWorld {
     }
     fn version(&self) -> usize {
         1
+    }
+}
+
+impl Clean for PantsWorld {
+    fn clean(&mut self) {
+        self.event_count = 0;
     }
 }
 
