@@ -19,21 +19,15 @@ pub mod tests {
 
     pub fn prepare_world() -> PantsWorld {
         let mut world = PantsWorldBuilder::make_world().unwrap();
-        world.setup();
+        world.setup(true);
         world
     }
 
     #[test]
     fn setup() {
         let world = prepare_world();
-        assert_eq!(
-            world.characters().get("kitie").unwrap().scene(),
-            &Some("home".into())
-        );
-        assert_eq!(
-            world.characters().get("doggie").unwrap().scene(),
-            &Some("home".into())
-        );
+        assert_eq!(world.characters().get("kitie").unwrap().scene(), &None);
+        assert_eq!(world.characters().get("doggie").unwrap().scene(), &None);
         assert_eq!(
             world.items().get("rabbit").unwrap().state(),
             &ItemState::InScene("bushes".into())
@@ -81,7 +75,16 @@ pub mod tests {
 
         let narrator = narrator::Pants::default();
 
-        // Talk at home
+        // move characters home
+        let events = narrator.available_events(&world);
+        let events = reload_events(&world, &narrator, events);
+        assert_eq!(events.len(), 2);
+        for mut event in events {
+            assert!(event.can_be_triggered(&world));
+            assert!(event.perform(&mut world));
+        }
+
+        // talk at home
         for _ in 0..5 {
             let events = narrator.available_events(&world);
             let mut events = reload_events(&world, &narrator, events);

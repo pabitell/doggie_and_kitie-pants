@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(tag = "name", rename_all = "snake_case")]
 pub enum ProtocolEvent {
+    MoveHome(data::MoveData),
     TalkAtHome(data::TalkData),
     MoveToBushes(data::MoveData),
     TalkInBushes(data::TalkData),
@@ -35,7 +36,7 @@ pub fn make_talk(name: &str, data: data::TalkData) -> events::Talk {
     event.set_tags(vec!["talk".to_string(), "no_read".to_string()]);
 
     event.set_condition(
-        CharacterInSceneCheck::cond(event.character().to_owned(), event.scene().to_owned())
+        CharacterInSceneCheck::cond(event.character().to_owned(), Some(event.scene().to_owned()))
             & SceneDialogCheck::cond(event.scene().to_owned(), event.dialog())
             & doggie_and_kitie_in_same_scene(),
     );
@@ -50,7 +51,7 @@ pub fn make_talk(name: &str, data: data::TalkData) -> events::Talk {
 pub fn make_move(
     name: &str,
     data: data::MoveData,
-    from_scene: &str,
+    from_scene: Option<String>,
     from_dialog: Option<usize>,
     items_state: Option<(Vec<String>, ItemState)>,
     increase_dialog: bool,
@@ -60,9 +61,10 @@ pub fn make_move(
     event.set_tags(vec!["move".to_string()]);
 
     let mut condition =
-        CharacterInSceneCheck::cond(event.character().to_owned(), from_scene.to_owned());
+        CharacterInSceneCheck::cond(event.character().to_owned(), from_scene.clone());
+
     if let Some(from_dialog) = from_dialog {
-        condition = condition & SceneDialogCheck::cond(from_scene.to_owned(), from_dialog);
+        condition = condition & SceneDialogCheck::cond(from_scene.to_owned().unwrap(), from_dialog);
     }
     if let Some((tags, state)) = items_state.as_ref() {
         condition = condition & AllItemsWithTagInStateCheck::cond(tags.clone(), state.to_owned());
@@ -140,7 +142,7 @@ pub fn make_pick(
         SameSceneCheck::cond(
             vec![event.character().to_string()],
             vec![event.item().to_string()],
-        ) & CharacterInSceneCheck::cond(event.character().to_owned(), scene.to_owned());
+        ) & CharacterInSceneCheck::cond(event.character().to_owned(), Some(scene.to_owned()));
     if let Some(dialog_idx) = dialog_idx {
         condition = condition & SceneDialogCheck::cond(scene.to_owned(), dialog_idx);
     }
@@ -170,7 +172,7 @@ pub fn make_use_inventory(
     event.set_world_updates(updates);
 
     let mut condition = doggie_and_kitie_in_same_scene()
-        & CharacterInSceneCheck::cond(event.character().to_owned(), scene.to_owned())
+        & CharacterInSceneCheck::cond(event.character().to_owned(), Some(scene.to_owned()))
         & HasItemCheck::cond(event.character().to_owned(), event.item().to_owned());
     if let Some(dialog_idx) = dialog_idx {
         condition = condition & SceneDialogCheck::cond(scene.to_owned(), dialog_idx);

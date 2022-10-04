@@ -19,6 +19,14 @@ doggie_and_kitie-pants-mice-short = Myši
 doggie_and_kitie-pants-mice-long = { doggie_and_kitie-pants-mice-short }, které se schovávají v komoře.
 
 # Events
+doggie_and_kitie-pants-doggie_move_home-action = Pejsek přijde domů.
+doggie_and_kitie-pants-doggie_move_home-success = Pejsek přišel domů.
+doggie_and_kitie-pants-doggie_move_home-fail = Pejsek nemůže přijít.
+
+doggie_and_kitie-pants-kitie_move_home-action = Kočička přijde domů.
+doggie_and_kitie-pants-kitie_move_home-success = Kočička přišla domů.
+doggie_and_kitie-pants-kitie_move_home-fail = Kočička nemůže přijít.
+
 doggie_and_kitie-pants-home_doggie_says-0-common =
     že bychom mohli jít do lesa.
 doggie_and_kitie-pants-home_doggie_says-0-action =

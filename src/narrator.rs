@@ -10,6 +10,18 @@ impl Narrator for Pants {
     fn all_events(&self, _world: &dyn World) -> Vec<Box<dyn Event>> {
         let mut res: Vec<Box<dyn Event>> = vec![];
 
+        // Move home first
+        for character in &["doggie", "kitie"] {
+            res.push(Box::new(events::make_move(
+                "move_home",
+                data::MoveData::new(character, "home"),
+                None,
+                None,
+                None,
+                false,
+            )));
+        }
+
         // Talk at home
         for (character, idx) in &[
             ("doggie", 0),
@@ -29,7 +41,7 @@ impl Narrator for Pants {
             res.push(Box::new(events::make_move(
                 "move_to_bushes",
                 data::MoveData::new(character, "bushes"),
-                "home",
+                Some("home".to_string()),
                 Some(5),
                 None,
                 false,
@@ -57,7 +69,7 @@ impl Narrator for Pants {
             res.push(Box::new(events::make_move(
                 "move_to_meadow",
                 data::MoveData::new(character, "meadow"),
-                "bushes",
+                Some("bushes".to_string()),
                 Some(4),
                 None,
                 false,
@@ -110,7 +122,7 @@ impl Narrator for Pants {
             res.push(Box::new(events::make_move(
                 "move_to_courtyard",
                 data::MoveData::new(character, "courtyard"),
-                "meadow",
+                Some("meadow".to_string()),
                 Some(9),
                 None,
                 false,
@@ -130,7 +142,7 @@ impl Narrator for Pants {
             res.push(Box::new(events::make_move(
                 "move_to_dressmakers",
                 data::MoveData::new(character, "dressmakers"),
-                "courtyard",
+                Some("courtyard".to_string()),
                 Some(1),
                 None,
                 false,
@@ -163,10 +175,18 @@ impl Narrator for Pants {
             Ok(ProtocolEvent::TalkAtHome(data)) => {
                 Some(Box::new(events::make_talk("talk_at_home", data)))
             }
+            Ok(ProtocolEvent::MoveHome(data)) => Some(Box::new(events::make_move(
+                "move_home",
+                data,
+                None,
+                None,
+                None,
+                false,
+            ))),
             Ok(ProtocolEvent::MoveToBushes(data)) => Some(Box::new(events::make_move(
                 "move_to_bushes",
                 data,
-                "home",
+                Some("home".to_string()),
                 Some(5),
                 None,
                 false,
@@ -180,7 +200,7 @@ impl Narrator for Pants {
             Ok(ProtocolEvent::MoveToMeadow(data)) => Some(Box::new(events::make_move(
                 "move_to_meadow",
                 data,
-                "bushes",
+                Some("bushes".to_string()),
                 Some(4),
                 None,
                 false,
@@ -205,7 +225,7 @@ impl Narrator for Pants {
             Ok(ProtocolEvent::MoveToCourtyard(data)) => Some(Box::new(events::make_move(
                 "move_to_courtyard",
                 data,
-                "meadow",
+                Some("meadow".to_owned()),
                 Some(9),
                 None,
                 false,
@@ -216,7 +236,7 @@ impl Narrator for Pants {
             Ok(ProtocolEvent::MoveToDressmakers(data)) => Some(Box::new(events::make_move(
                 "move_to_dressmakers",
                 data,
-                "courtyard",
+                Some("courtyard".to_owned()),
                 Some(1),
                 None,
                 false,

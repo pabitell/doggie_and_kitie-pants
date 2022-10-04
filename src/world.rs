@@ -166,10 +166,6 @@ impl World for PantsWorld {
             self.randomize_id();
         }
 
-        self.characters_mut()
-            .values_mut()
-            .for_each(|c| c.set_scene(Some("home".into())));
-
         self.items_mut().values_mut().for_each(|i| {
             i.set_state(match i.name() {
                 "rabbit" => ItemState::InScene("bushes".to_owned()),
