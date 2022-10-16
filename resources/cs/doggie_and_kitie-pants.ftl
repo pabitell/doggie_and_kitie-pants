@@ -9,6 +9,9 @@ doggie_and_kitie-pants-doggie-short = Pejsek
 doggie_and_kitie-pants-doggie-long = { doggie_and_kitie-pants-doggie-short } 
 
 # Items
+doggie_and_kitie-pants-ear-short = Ucho
+doggie_and_kitie-pants-ear-long = { doggie_and_kitie-pants-ear-short }, které měl pejsek nakřivo.
+
 doggie_and_kitie-pants-rabbit-short = Zajíc
 doggie_and_kitie-pants-rabbit-long = { doggie_and_kitie-pants-rabbit-short }, který koukal ze křoví.
 
@@ -63,11 +66,11 @@ doggie_and_kitie-pants-home_kitie_says-3-success =
 doggie_and_kitie-pants-home_kitie_says-3-success =
     Kočička nechce říct, { doggie_and_kitie-pants-home_kitie_says-3-common }
 
-doggie_and_kitie-pants-home_doggie_says-4-action =
+doggie_and_kitie-pants-doggie_fix_ear-action =
     Pejsek si narovná uši.
-doggie_and_kitie-pants-home_doggie_says-4-success =
+doggie_and_kitie-pants-doggie_fix_ear-success =
     Pejsek si narovnal uši.
-doggie_and_kitie-pants-home_doggie_says-4-fail =
+doggie_and_kitie-pants-doggie_fix_ear-fail =
     Pejsek si nechce narovnat uši.
 
 doggie_and_kitie-pants-doggie_move_to_bushes-action =

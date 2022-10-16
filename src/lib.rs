@@ -85,7 +85,7 @@ pub mod tests {
         }
 
         // talk at home
-        for _ in 0..5 {
+        for _ in 0..4 {
             let events = narrator.available_events(&world);
             let mut events = reload_events(&world, &narrator, events);
             assert_eq!(events.len(), 1);
@@ -93,6 +93,14 @@ pub mod tests {
             assert!(events[0].can_be_triggered(&world));
             assert!(events[0].perform(&mut world));
         }
+
+        // doggie fixes his ear
+        let events = narrator.available_events(&world);
+        let mut events = reload_events(&world, &narrator, events);
+        assert_eq!(events.len(), 1);
+        assert_eq!(events[0].name(), "fix_ear");
+        assert!(events[0].can_be_triggered(&world));
+        assert!(events[0].perform(&mut world));
 
         // move characters to bushes
         let events = narrator.available_events(&world);

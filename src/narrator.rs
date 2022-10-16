@@ -23,18 +23,21 @@ impl Narrator for Pants {
         }
 
         // Talk at home
-        for (character, idx) in &[
-            ("doggie", 0),
-            ("kitie", 1),
-            ("doggie", 2),
-            ("kitie", 3),
-            ("doggie", 4),
-        ] {
+        for (character, idx) in &[("doggie", 0), ("kitie", 1), ("doggie", 2), ("kitie", 3)] {
             res.push(Box::new(events::make_talk(
                 "talk_at_home",
                 data::TalkData::new(character, "home", *idx),
             )));
         }
+
+        // Fix doggie's ear
+        res.push(Box::new(events::make_find(
+            "fix_ear",
+            data::UseItemData::new("doggie", "ear"),
+            "home",
+            4,
+            true,
+        )));
 
         // Move to bushes
         for character in &["doggie", "kitie"] {
@@ -58,10 +61,11 @@ impl Narrator for Pants {
 
         // Find the rabbit
         res.push(Box::new(events::make_find(
-            "rabbit",
+            "find_rabbit",
             data::UseItemData::new("doggie", "rabbit"),
             "bushes",
             1,
+            false,
         )));
 
         // Move to meadow
@@ -159,10 +163,11 @@ impl Narrator for Pants {
 
         // Find mice
         res.push(Box::new(events::make_find(
-            "mice",
+            "find_mice",
             data::UseItemData::new("kitie", "mice"),
             "dressmakers",
             3,
+            false,
         )));
 
         res
@@ -183,6 +188,9 @@ impl Narrator for Pants {
                 None,
                 false,
             ))),
+            Ok(ProtocolEvent::FixEar(data)) => Some(Box::new(events::make_find(
+                "fix_ear", data, "home", 4, true,
+            ))),
             Ok(ProtocolEvent::MoveToBushes(data)) => Some(Box::new(events::make_move(
                 "move_to_bushes",
                 data,
@@ -194,9 +202,13 @@ impl Narrator for Pants {
             Ok(ProtocolEvent::TalkInBushes(data)) => {
                 Some(Box::new(events::make_talk("talk_in_bushes", data)))
             }
-            Ok(ProtocolEvent::FindRabbit(data)) => {
-                Some(Box::new(events::make_find("rabbit", data, "bushes", 1)))
-            }
+            Ok(ProtocolEvent::FindRabbit(data)) => Some(Box::new(events::make_find(
+                "find_rabbit",
+                data,
+                "bushes",
+                1,
+                false,
+            ))),
             Ok(ProtocolEvent::MoveToMeadow(data)) => Some(Box::new(events::make_move(
                 "move_to_meadow",
                 data,
@@ -244,9 +256,13 @@ impl Narrator for Pants {
             Ok(ProtocolEvent::TalkAtDressmakers(data)) => {
                 Some(Box::new(events::make_talk("talk_at_dressmakers", data)))
             }
-            Ok(ProtocolEvent::FindMice(data)) => {
-                Some(Box::new(events::make_find("mice", data, "dressmakers", 3)))
-            }
+            Ok(ProtocolEvent::FindMice(data)) => Some(Box::new(events::make_find(
+                "find_mice",
+                data,
+                "dressmakers",
+                3,
+                false,
+            ))),
             Err(_) => None,
         }
     }

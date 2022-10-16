@@ -13,6 +13,7 @@ pub enum ProtocolEvent {
     MoveHome(data::MoveData),
     TalkAtHome(data::TalkData),
     MoveToBushes(data::MoveData),
+    FixEar(data::UseItemData),
     TalkInBushes(data::TalkData),
     FindRabbit(data::UseItemData),
     MoveToMeadow(data::MoveData),
@@ -88,16 +89,21 @@ pub fn make_move(
 }
 
 pub fn make_find(
-    item: &str,
+    name: &str,
     data: data::UseItemData,
     scene: &str,
     dialog_idx: usize,
+    self_trigger: bool,
 ) -> events::UseItem {
-    let mut event = events::UseItem::new(format!("find_{}", item), data);
-    let item = item.to_string();
+    let item = data.item.to_string();
+    let mut event = events::UseItem::new(name, data);
     let scene = scene.to_string();
 
-    event.set_tags(vec!["find".to_string()]);
+    if self_trigger {
+        event.set_tags(vec!["find".to_string(), "self-trigger".to_string()]);
+    } else {
+        event.set_tags(vec!["find".to_string()]);
+    }
 
     event.set_condition(
         SameSceneCheck::cond(

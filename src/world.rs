@@ -95,6 +95,7 @@ impl WorldBuilder<PantsWorld> for PantsWorldBuilder {
             .scene(Box::new(scenes::Dressmakers::default()))
             .character(Box::new(characters::Kitie::default()))
             .character(Box::new(characters::Doggie::default()))
+            .item(Box::new(items::Ear::default()))
             .item(Box::new(items::Rabbit::default()))
             .item(Box::new(items::Earthworm::default()))
             .item(Box::new(items::Mice::default()))
@@ -171,6 +172,7 @@ impl World for PantsWorld {
                 "rabbit" => ItemState::InScene("bushes".to_owned()),
                 "earthworm" => ItemState::InScene("meadow".to_owned()),
                 "mice" => ItemState::InScene("dressmakers".to_owned()),
+                "ear" => ItemState::InScene("home".to_owned()),
                 _ => ItemState::Unassigned,
             })
         });

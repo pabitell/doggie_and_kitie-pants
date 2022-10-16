@@ -6,6 +6,18 @@ use crate::events::ProtocolEvent;
 pub fn make_print_items(world: Box<dyn World>) -> Vec<PrintItem> {
     let mut res = vec![];
 
+    // fix eark
+    let item = world.items().get("ear").unwrap();
+    let data = serde_json::to_value(ProtocolEvent::FixEar(data::UseItemData::new(
+        "doggie", "ear",
+    )))
+    .unwrap();
+    res.push(
+        PrintItem::new(Rc::new(data.to_string().as_bytes().to_vec()))
+            .title(Some(item.short(world.as_ref())))
+            .img_url(Some(format!("images/{}.svg", item.name()))),
+    );
+
     // move to bushes
     let scene = world.scenes().get("bushes").unwrap();
     let data = serde_json::to_value(ProtocolEvent::MoveToBushes(data::MoveData::new(
