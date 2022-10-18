@@ -1,8 +1,5 @@
 use anyhow::anyhow;
-use pabitell_lib::{
-    scene_no_music, scene_with_dialog, AsAny, Music, Named,
-    World,
-};
+use pabitell_lib::{scene_no_music, scene_with_dialog, AsAny, Music, Named, World};
 use serde_json::Value;
 use std::any::Any;
 
@@ -19,4 +16,13 @@ scene_with_dialog!(Courtyard, "courtyard", []);
 scene_no_music!(Courtyard);
 
 scene_with_dialog!(Dressmakers, "dressmakers", []);
-scene_no_music!(Dressmakers);
+
+impl Music for Dressmakers {
+    fn music(&self) -> Option<String> {
+        if self.dialog > 1 {
+            Some("music/tancuj-tancuj-vykrucaj.ogg".to_owned())
+        } else {
+            None
+        }
+    }
+}
