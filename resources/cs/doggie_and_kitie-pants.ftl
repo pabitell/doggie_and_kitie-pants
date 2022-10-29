@@ -45,7 +45,7 @@ doggie_and_kitie-pants-home_kitie_says-1-action =
     Kočička souhlasí, { doggie_and_kitie-pants-home_kitie_says-1-common }
 doggie_and_kitie-pants-home_kitie_says-1-success =
     Kočička souhlasila, { doggie_and_kitie-pants-home_kitie_says-1-common }
-doggie_and_kitie-pants-home_kitie_says-1-success =
+doggie_and_kitie-pants-home_kitie_says-1-fail =
     Kočička nesouhlasí, { doggie_and_kitie-pants-home_kitie_says-1-common }
 
 doggie_and_kitie-pants-home_doggie_says-2-common =
@@ -63,7 +63,7 @@ doggie_and_kitie-pants-home_kitie_says-3-action =
     Kočička řekne, { doggie_and_kitie-pants-home_kitie_says-3-common }
 doggie_and_kitie-pants-home_kitie_says-3-success =
     Kočička řekla, { doggie_and_kitie-pants-home_kitie_says-3-common }
-doggie_and_kitie-pants-home_kitie_says-3-success =
+doggie_and_kitie-pants-home_kitie_says-3-fail =
     Kočička nechce říct, { doggie_and_kitie-pants-home_kitie_says-3-common }
 
 doggie_and_kitie-pants-doggie_fix_ear-action =
