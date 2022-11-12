@@ -1,0 +1,88 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Release
+
+jobs:
+  build-story:
+    name: Build story
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        with:
+          submodules: recursive
+
+      - name: Install stable wasm toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: wasm32-unknown-unknown
+          override: true
+
+      - name: Install trunk to compile story
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: --locked trunk
+
+      - name: Prepare the directory structure
+        run:
+          mkdir -p dist/doggie_and_kitie/pants
+
+      - name: Build sources using trunk
+        run:
+          trunk build --release --public-url doggie_and_kitie/pants --dist dist/doggie_and_kitie/pants
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: doggie_and_kitie-pants
+          path: dist/doggie_and_kitie/pants
+
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: ['build-story']
+
+    steps:
+      - name: Download story
+        uses: actions/download-artifact@v1
+        with:
+          name: doggie_and_kitie-pants
+          path: doggie_and_kitie-pants
+
+      - name: Pack Story
+        run:
+          tar czf doggie_and_kitie-pants.tar.gz doggie_and_kitie-pants
+
+      - name: Get description
+        id: get_description
+        run: echo "##[set-output name=tag_description;]$(git tag -l --format='%(contents:body)' ${{ github.ref }})"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: "${{ steps.get_description.outputs.description }}"
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: doggie_and_kitie-pants.tar.gz
+          asset_name: doggie_and_kitie-pants.tar.gz
+          asset_content_type: application/bin
