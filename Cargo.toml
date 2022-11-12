@@ -1,6 +1,6 @@
 [package]
 name = "doggie_and_kitie_pants"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Stepan Henek <stepan@henek.name>"]
 edition = "2021"
 description = "Interactive storytelling - doggie and kitie pants story"
