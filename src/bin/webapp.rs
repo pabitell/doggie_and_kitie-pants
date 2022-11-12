@@ -1,7 +1,11 @@
+#[cfg(target_arch = "wasm32")]
+use lol_alloc::{FreeListAllocator, LockedAllocator};
+
 use common::webapp;
 
+#[cfg(target_arch = "wasm32")]
 #[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+static ALLOCATOR: LockedAllocator = LockedAllocator::new(FreeListAllocator::new());
 
 fn main() {
     wasm_logger::init(wasm_logger::Config::default());
