@@ -65,7 +65,7 @@ pub fn make_move(
         CharacterInSceneCheck::cond(event.character().to_owned(), from_scene.clone());
 
     if let Some(from_dialog) = from_dialog {
-        condition = condition & SceneDialogCheck::cond(from_scene.to_owned().unwrap(), from_dialog);
+        condition = condition & SceneDialogCheck::cond(from_scene.unwrap(), from_dialog);
     }
     if let Some((tags, state)) = items_state.as_ref() {
         condition = condition & AllItemsWithTagInStateCheck::cond(tags.clone(), state.to_owned());
@@ -113,11 +113,8 @@ pub fn make_find(
     );
 
     event.set_world_updates(vec![
-        Box::new(updates::AssignItemChange::new(
-            item.to_owned(),
-            ItemState::Unassigned,
-        )),
-        Box::new(updates::NextSceneDialogChange::new(scene.to_owned())),
+        Box::new(updates::AssignItemChange::new(item, ItemState::Unassigned)),
+        Box::new(updates::NextSceneDialogChange::new(scene)),
     ]);
 
     event
@@ -150,7 +147,7 @@ pub fn make_pick(
             vec![event.item().to_string()],
         ) & CharacterInSceneCheck::cond(event.character().to_owned(), Some(scene.to_owned()));
     if let Some(dialog_idx) = dialog_idx {
-        condition = condition & SceneDialogCheck::cond(scene.to_owned(), dialog_idx);
+        condition = condition & SceneDialogCheck::cond(scene, dialog_idx);
     }
     event.set_condition(condition);
 

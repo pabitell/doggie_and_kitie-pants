@@ -114,12 +114,10 @@ impl Narrator for Pants {
         )));
 
         // Talk on meadow
-        for (character, idx) in &[("doggie", 8)] {
-            res.push(Box::new(events::make_talk(
-                "talk_on_meadow",
-                data::TalkData::new(character, "meadow", *idx),
-            )));
-        }
+        res.push(Box::new(events::make_talk(
+            "talk_on_meadow",
+            data::TalkData::new("doggie", "meadow", 8),
+        )));
 
         // Move to courtyard
         for character in &["doggie", "kitie"] {
@@ -134,12 +132,10 @@ impl Narrator for Pants {
         }
 
         // Talk on courtyard
-        for (character, idx) in &[("kitie", 0)] {
-            res.push(Box::new(events::make_talk(
-                "talk_in_courtyard",
-                data::TalkData::new(character, "courtyard", *idx),
-            )));
-        }
+        res.push(Box::new(events::make_talk(
+            "talk_in_courtyard",
+            data::TalkData::new("kitie", "courtyard", 0),
+        )));
 
         // Move to dressmakers
         for character in &["doggie", "kitie"] {
